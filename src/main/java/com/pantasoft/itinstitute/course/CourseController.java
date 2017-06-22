@@ -17,20 +17,21 @@ import java.util.Optional;
 public class CourseController {
 
     @Autowired
-    private CourseService CourseService;
+    private CourseService courseService;
 
     @GetMapping("/topics/{topicId}/courses")
     public ResponseEntity getAllCourses(@PathVariable String topicId){
-        List<Course> courses = CourseService.getAllCourses(topicId);
+        List<Course> courses = courseService.getAllCourses(topicId);
 
         if (courses.isEmpty())
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+
         return ResponseEntity.status(HttpStatus.OK).body(courses);
     }
 
     @GetMapping("/topics/courses/{courseId}")
     public ResponseEntity getCourse(@PathVariable String courseId){
-        Optional<Course> course = CourseService.getCourse(courseId);
+        Optional<Course> course = courseService.getCourse(courseId);
 
         if (course.isPresent())
             return ResponseEntity.status(HttpStatus.OK).body(course.get());
@@ -41,22 +42,20 @@ public class CourseController {
     @PostMapping( value = "/topics/{topicId}/courses")
     public ResponseEntity addCourse(@RequestBody Course course, @PathVariable String topicId){
         course.setTopic(new Topic(topicId,"",""));
-        Course res = CourseService.addCourse(course);
+        Course res = courseService.addCourse(course);
         return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
     @PutMapping(value = "/topics/{topicId}/courses/{id}")
     public ResponseEntity updateCourse(@RequestBody Course course, @PathVariable String topicId, @PathVariable String id){
         course.setTopic(new Topic(topicId,"",""));
-        Course res = CourseService.updateCourse(course);
+        Course res = courseService.updateCourse(course);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @DeleteMapping(value = "/topics/{topicId}/courses/{courseId}")
     public ResponseEntity deleteTopic(@PathVariable String courseId){
-        CourseService.deleteCourse(courseId);
+        courseService.deleteCourse(courseId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
-
-
 }

@@ -53,8 +53,8 @@ public class TopicIntegrationTest {
                 "/topic", topic, null);
 
         Assert.assertThat(response.getStatusCode(), IsEqual.equalTo(HttpStatus.CREATED));
-    }
 
+    }
 
     @Test
     public void getTopicsByIdTest() {

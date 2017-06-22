@@ -1,5 +1,7 @@
 package com.pantasoft.itinstitute.course;
 
+import com.pantasoft.itinstitute.topic.Topic;
+import com.pantasoft.itinstitute.topic.TopicIntegrationTest;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,12 +9,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -34,7 +40,21 @@ public class CourseIntegrationTest {
         Assert.assertThat(response.getStatusCode(), IsEqual.equalTo(HttpStatus.NO_CONTENT));
     }
 
-/*    @Test
+    @Test
+    public void addCourse() {
+
+        Topic topic = new Topic("javascript","Javascript","Javascript Description");
+        this.restTemplate.postForEntity("/topic", topic, null);
+
+        Course course = new Course("javascriptcourse","JavaScriptCourse","JavaScript Courses",topic.getId());
+
+        ResponseEntity<Course> response =  this.restTemplate.postForEntity(
+                "/topics/javascript/courses", course, Course.class);
+
+        Assert.assertThat(response.getStatusCode(), IsEqual.equalTo(HttpStatus.CREATED));
+    }
+
+    @Test
     public void getCoursesByIdTopic() {
         String idTopic = "javascript";
         ResponseEntity<Topic> response = this.restTemplate.getForEntity(
@@ -42,20 +62,6 @@ public class CourseIntegrationTest {
 
         assertThat(response.getStatusCode(), IsEqual.equalTo(HttpStatus.OK));
     }
-
-
-    @Test
-    public void addCourse() {
-        Course course = new Course("javacourse","JavaCourse","Java Courses","java");
-
-        ResponseEntity<Topic> response =  this.restTemplate.postForEntity(
-                "/topics/java/courses", course, null);
-
-        Assert.assertThat(response.getStatusCode(), IsEqual.equalTo(HttpStatus.CREATED));
-    }
-
-
-
 
     @Test
     public void getTopics_OK() {
@@ -85,6 +91,6 @@ public class CourseIntegrationTest {
 
 
         assertThat(topicBody.getName(), is(topicName));
-    }*/
+    }
 
 }
